@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, GithubLogo, SearchForm} from './style'
+import { Container, GithubLogo, SearchForm} from './styles'
 
 const Header = () => {
     return (
