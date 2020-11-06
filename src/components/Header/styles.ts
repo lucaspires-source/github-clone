@@ -6,7 +6,11 @@ display:flex;
 align-items:center;
 background:var(--header);
 padding:11px 16px;
-margin-bottom:50px
+
+@media (min-width: 768px) {
+  margin-bottom:50px;
+}
+
 `;
 export const GithubLogo = styled(FaGithub)`
   fill:var(--logo);
