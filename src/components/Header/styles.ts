@@ -8,7 +8,6 @@ background:var(--header);
 padding:11px 16px;
 
 @media (min-width: 768px) {
-  margin-bottom:50px;
 }
 
 `;
