@@ -76,6 +76,16 @@ export const Bottomside = styled.div`
     &.typescript {
       background: var(--typescript);
     }
+    &.html{
+      background:green;
+    }
+    &.css{
+      background:purple;
+    }
+
+  &.other{
+    background:var(--other-language)
+  }
   }
 `;
 

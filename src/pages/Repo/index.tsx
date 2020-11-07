@@ -19,7 +19,7 @@ interface Data {
   error?: string;
 }
 
-const Repo: React.FC = () => {
+const Repo = () => {
   const { username, reponame } = useParams();
   const [data, setData] = useState<Data>();
 

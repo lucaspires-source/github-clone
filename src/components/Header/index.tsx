@@ -1,10 +1,9 @@
-  
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Container, GithubLogo, SearchForm } from './styles';
 
-const Header: React.FC = () => {
+const Header = () => {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
@@ -14,12 +13,13 @@ const Header: React.FC = () => {
     navigate('/' + search.toLowerCase().trim());
   }
 
+ 
   return (
     <Container>
       <GithubLogo/>
       <SearchForm onSubmit={handleSubmit}>
         <input
-          placeholder="Enter Username or Repo..."
+          placeholder="Search or Jump to..."
           value={search}
           onChange={(e) => setSearch(e.currentTarget.value)}
         />
@@ -29,4 +29,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-  
