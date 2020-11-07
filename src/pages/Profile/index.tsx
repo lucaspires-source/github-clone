@@ -100,6 +100,7 @@ const Profile = () => {
                     description={item.description}
                     language={item.language}
                     stars={item.stargazers_count}
+                    
                     forks={item.forks}
                   />
                 ))}

@@ -5,6 +5,7 @@ import GlobalStyles from './styles/GlobalStyles';
 import Header from './components/Header';
 import Profile from './pages/Profile';
 import Repo from './pages/Repo';
+import Footer from './components/Footer'
 const App = () => {
   return (
     <BrowserRouter>
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/:username" element={<Profile/>} />
         <Route path="/:username/:repo" element={<Repo/>} />
       </Routes>
+      <Footer/>
       <GlobalStyles/>
     </BrowserRouter>
 

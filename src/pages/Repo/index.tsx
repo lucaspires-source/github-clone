@@ -1,18 +1,28 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { RepoIcon } from '../Profile/styles';
-import { Breadcrumb, Container,Stats,StarIcon,LinkButton,ForkIcon,GithubIcon } from './styles';
-import { APIRepo } from '../../@types';
 
+import {
+  Container,
+  Breadcrumb,
+  RepoIcon,
+  Stats,
+  StarIcon,
+  ForkIcon,
+  LinkButton,
+  GithubIcon,
+} from './styles';
+
+import { APIRepo } from '../../@types';
 
 interface Data {
   repo?: APIRepo;
   error?: string;
 }
 
-const Repo  = () => {
+const Repo: React.FC = () => {
   const { username, reponame } = useParams();
   const [data, setData] = useState<Data>();
+
   useEffect(() => {
     fetch(`https://api.github.com/repos/${username}/${reponame}`).then(
       async (response) => {
@@ -34,37 +44,42 @@ const Repo  = () => {
   }
 
   return (
-      <Container>
-          <Breadcrumb>
-            <RepoIcon/>
-            <Link className={"username"} to={"lucaspires"}>
-                lucaspires
-            </Link>
-            <span></span>
-            <Link className={"reponame"} to={"/lucaspires/pokedex"}>
-                Pokedex
-            </Link>
+    <Container>
+      <Breadcrumb>
+        <RepoIcon />
 
-          </Breadcrumb>
-          <p>a POKEDEX MADE WITH REACT</p>
-          <Stats>
-            <li>
-                <StarIcon />
-                <b>9</b>
-                <span>stars</span>
-            </li>
-            <li>
-                <ForkIcon />
-                <b>0</b>
-                <span>forks</span>
-            </li>
+        <Link className={'username'} to={`/${username}`}>
+          {username}
+        </Link>
+
+        <span>/</span>
+
+        <Link className={'reponame'} to={`/${username}/${reponame}`}>
+          {reponame}
+        </Link>
+      </Breadcrumb>
+
+      <p>{data.repo.description}</p>
+
+      <Stats>
+        <li>
+          <StarIcon />
+          <b>{data.repo.stargazers_count}</b>
+          <span>stars</span>
+        </li>
+        <li>
+          <ForkIcon />
+          <b>{data.repo.forks}</b>
+          <span>forks</span>
+        </li>
       </Stats>
-      <LinkButton href={"https://github.com/lucaspires-source/pokedex"}>
+
+      <LinkButton href={data.repo.html_url}>
         <GithubIcon />
         <span>View on GitHub</span>
       </LinkButton>
-      </Container>
-  )
-}
+    </Container>
+  );
+};
 
 export default Repo;
