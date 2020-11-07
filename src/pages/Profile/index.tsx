@@ -1,16 +1,60 @@
-import React from 'react';
+import React, {useEffect,useState} from 'react';
+import {useParams} from 'react-router-dom'
 import { Container, Main, LeftSide, RightSide, Repos,CalendarHeading,Tab } from './styles';
 import ProfileData from '../../components/ProfileData';
 import RepoCard from '../../components/RepoCard';
 import RandomCalendar from '../../components/RandomCalendar';
 import { RepoIcon } from '../../components/RepoCard/styles';
+import { APIUser, APIRepo } from '../../@types';
+
+interface Data {
+  user?: APIUser;
+  repos?: APIRepo[];
+  error?: string;
+}
+
 const Profile = () => {
+
+    const {username = "lucaspires-source"} = useParams();
+    const [data, setData] = useState<Data>();
+    useEffect(() =>{
+      Promise.all([
+        fetch(`https://api.github.com/users/${username}`),
+        fetch(`https://api.github.com/users/${username}/repos`),
+      ]).then( async (responses) =>{
+        const [userResponse, reposResponse] = responses;
+        
+        if (userResponse.status === 404) {
+          setData({ error: 'User not found!' });
+          return;
+        }
+       
+      const user = await userResponse.json();
+      const repos = await reposResponse.json();
+
+      const shuffledRepos = repos.sort(() => 0.5 - Math.random());
+      const slicedRepos = shuffledRepos.slice(0, 6) 
+      
+      setData({
+        user,
+        repos: slicedRepos,
+      });  
+    })
+    }, [username])
+    
+    if (data?.error) {
+      return <h1>{data.error}</h1>;
+    }
+  
+    if (!data?.user || !data?.repos) {
+      return <h1>Loading...</h1>;
+    }
 
   const TabContent = () => (
     <div className="content">
       <RepoIcon />
       <span className="label">Repositories</span>
-      <span className="number"></span>
+      <span className="number">{data.user?.public_repos}</span>
     </div>
   );
 
@@ -27,37 +71,36 @@ const Profile = () => {
         <Main>
           <LeftSide>
             <ProfileData
-              username={"lucaspires"}
-              name={"Lucas Ribeiro Pires"}
-              avatarUrl={
-                "https://avatars1.githubusercontent.com/u/60105171?s=460&u=288efdeb49c6a7d871e7aef918c36223962944bd&v=4"
-              }
-              followers={1}
-              following={0}
-              company={undefined}
-              location={"Brasília, Brazil"}
-              email={"pires.lucas94@gmail.com"}
-              blog={"https://www.linkedin.com/in/lucas-ribeiro-pires-0b4516140/"}
+              username={data.user.login}
+              name={data.user.name}
+              avatarUrl={data.user.avatar_url}
+              followers={data.user.followers}
+              following={data.user.following}
+              company={data.user.company}
+              location={data.user.location}
+              email={data.user.email}
+              blog={data.user.blog}
             />
           </LeftSide>
           <RightSide>
-            <Repos>
               <Tab className= "mobile">
-                <TabContent/>
-                <span className= "line"/>
+                  <TabContent/>
+                  <span className= "line"/>
               </Tab>
+            <Repos>
+ 
               <h2>Pinned</h2>
 
               <div>
-                {[1,2,3,4,5,6].map(n =>(
+                {data.repos.map((item) =>(
                   <RepoCard
-                    key={n}
-                    username={"lucaspires"}
-                    reponame={"pokedex"}
-                    description={"a POKEDEX MADE WITH REACT"}
-                    language={n % 3 === 0 ? "JavaScript" : "TypeScript"}
-                    stars={8}
-                    forks={4}
+                    key={item.name}
+                    username={item.owner.login}
+                    reponame={item.name}
+                    description={item.description}
+                    language={item.language}
+                    stars={item.stargazers_count}
+                    forks={item.forks}
                   />
                 ))}
               </div>

@@ -1,9 +1,38 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React,{useState,useEffect} from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { RepoIcon } from '../Profile/styles';
 import { Breadcrumb, Container,Stats,StarIcon,LinkButton,ForkIcon,GithubIcon } from './styles';
+import { APIRepo } from '../../@types';
+
+
+interface Data {
+  repo?: APIRepo;
+  error?: string;
+}
 
 const Repo  = () => {
+  const { username, reponame } = useParams();
+  const [data, setData] = useState<Data>();
+  useEffect(() => {
+    fetch(`https://api.github.com/repos/${username}/${reponame}`).then(
+      async (response) => {
+        setData(
+          response.status === 404
+            ? { error: 'Repository not found!' }
+            : { repo: await response.json() }
+        );
+      }
+    );
+  }, [reponame, username]);
+
+  if (data?.error) {
+    return <h1>{data.error}</h1>;
+  }
+
+  if (!data?.repo) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
       <Container>
           <Breadcrumb>

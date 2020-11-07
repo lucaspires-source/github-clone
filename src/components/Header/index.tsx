@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Container, GithubLogo, SearchForm} from './styles'
 import "bootstrap/dist/css/bootstrap.min.css";
 

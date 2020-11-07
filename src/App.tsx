@@ -5,7 +5,6 @@ import GlobalStyles from './styles/GlobalStyles';
 import Header from './components/Header';
 import Profile from './pages/Profile';
 import Repo from './pages/Repo';
-
 const App = () => {
   return (
     <BrowserRouter>
